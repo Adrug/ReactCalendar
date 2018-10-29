@@ -1,14 +1,19 @@
-var React = require('react');
+import React, { Component } from 'react';
+import Calendar from './calendar';
 
-class MainPage extends React.Component{
+class MainPage extends Component{
     constructor(props) {
         super(props);
     }
 
     render() {
-        return <h1>Hello world!</h1>;
+        return (
+            <div className="container-fluid">
+                <Calendar />
+            </div>
+        );
     }
 
 }
 
-module.exports = MainPage;
+export default MainPage;

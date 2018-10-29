@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
  
 module.exports = {
     entry: "./app/app.jsx", // входная точка - исходный файл
@@ -17,10 +18,22 @@ module.exports = {
                 test: /\.jsx?$/, // определяем тип файлов
                 exclude: /(node_modules)/,  // исключаем из обработки папку node_modules
                 use: ['babel-loader'],   // определяем загрузчик
+            },
+            {
+                test: /\.scss$/, 
+                exclude: /(node_modules)/, 
+                use: ['style-loader', 
+                {
+                    loader: 'css-loader',
+                    options: {
+                        importLoaders: 1,
+                    }
+                }, 'postcss-loader']
             }
         ]
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new ExtractTextPlugin({filename: 'dist/app.css', allChunks: true})
     ]
 }
