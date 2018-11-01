@@ -5,9 +5,10 @@ class Calendar extends Component {
     constructor(props) {
         super(props);
        
+        let days = props.days || this.initDays(new Date());
         let now = new Date();
         this.state = { 
-            days: this.getDays(new Date()),
+            days: days,
             currentMonth: now
         }
     }
@@ -24,7 +25,7 @@ class Calendar extends Component {
         return weekDays;
     }
 
-    getDays(date) {
+    initDays(date) {
         let year = date.getFullYear();
         let month = date.getMonth();
 
@@ -40,8 +41,14 @@ class Calendar extends Component {
 
         let days = prev.slice(prev.length - takePrevCount)
         .concat(current)
-        .concat(next.slice(0,takeNextCount));
-        
+        .concat(next.slice(0,takeNextCount))
+        .map(d => {
+            return {
+                date: d,
+                todos: []
+            }
+        });
+
         return days;
     }
 
@@ -53,13 +60,13 @@ class Calendar extends Component {
         return days;
     }
 
-    handleClick(month)
+    changeMonth(month)
     {
         let date = new Date(this.state.currentMonth);
         date.setMonth(month);
         this.setState({ 
             currentMonth: date,
-            days: this.getDays(date)
+            days: this.initDays(date)
         });
     }
 
@@ -67,24 +74,24 @@ class Calendar extends Component {
     render() { 
         return (
             <div className="row">
-                <div className="col-8">
+                <div className="col-9">
 
                     <ul className="nav justify-content-center">
                         <li className="nav-item">
-                            <button onClick={()=> this.handleClick(this.state.currentMonth.getMonth() - 1)}>&#60;</button>
+                            <button onClick={()=> this.changeMonth(this.state.currentMonth.getMonth() - 1)}>&#60;</button>
                         </li>
                         <li className="nav-item">
                             {this.state.currentMonth.toLocaleDateString('ru-RU',{year:'numeric',month:'long'})}
                         </li>
                         <li className="nav-item">
-                            <button onClick={()=> this.handleClick(this.state.currentMonth.getMonth() + 1)}>&#62;</button>
+                            <button onClick={()=> this.changeMonth(this.state.currentMonth.getMonth() + 1)}>&#62;</button>
                         </li>
                     </ul>
                     {this.splitByWeek(this.state.days).map((week,index) => (
                     <CalendarWeek key={index} week={week} />)) }
                 </div>
 
-                <div className="col-4">
+                <div className="col">
                     show day todo
                 </div>
             </div>

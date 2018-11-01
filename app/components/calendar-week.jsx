@@ -10,7 +10,7 @@ class CalendarWeek extends Component {
     render() { 
         return (
             <div className="card-group">
-                {this.props.week.map(day =>  (<CalendarDay key={day} day={day} />))}
+                {this.props.week.map((day,index) =>  (<CalendarDay key={index} day={day} />))}
             </div>
             );
     }
